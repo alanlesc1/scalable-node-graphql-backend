@@ -1,0 +1,176 @@
+{
+	"info": {
+		"_postman_id": "dc2f8fcd-b924-41f0-9ba5-76f817946ab1",
+		"name": "scalable-node-graphql-backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "User sign-up",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation signUp($name: String!, $email: String!, $password: String!) {\n  signUp(name: $name, email: $email, password: $password) {\n    __typename\n    ... on SignUpResultSuccess {\n      user {\n        id\n        createdAt\n        updatedAt\n        isActive\n        name\n        email\n        isUserVerified\n      }\n    }\n\n    ... on SignUpResultError {\n      message\n    }\n  }\n}\n",
+								"variables": "{\n    \"name\": \"{{userName}}\",\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{userPassword}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Generate verification code",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation generateUserVerification($email: String!, $password: String!) {\n  verifyUser(email: $email, password: $password) {\n    __typename\n    ... on UserVerificationResultSuccess {\n      user {\n        id\n        createdAt\n        updatedAt\n        isActive\n        name\n        email\n        isUserVerified\n      }\n    }\n\n    ... on UserVerificationResultError {\n      message\n    }\n  }\n}\n",
+								"variables": "{\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{userPassword}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify verification code",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation verifyUser(\n  $email: String!\n  $password: String!\n  $verificationCode: String\n) {\n  verifyUser(\n    email: $email\n    password: $password\n    verificationCode: $verificationCode\n  ) {\n    __typename\n    ... on UserVerificationResultSuccess {\n      user {\n        id\n        createdAt\n        updatedAt\n        isActive\n        name\n        email\n        isUserVerified\n      }\n    }\n\n    ... on UserVerificationResultError {\n      message\n    }\n  }\n}\n",
+								"variables": "{\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{userPassword}}\",\n    \"verificationCode\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation login($email: String!, $password: String!) {\n  login(email: $email, password: $password) {\n    __typename\n    ... on LoginResultSuccess {\n      token\n      user {\n        id\n        createdAt\n        updatedAt\n        isActive\n        name\n        email\n      }\n    }\n\n    ... on LoginResultError {\n      message\n    }\n  }\n}\n",
+								"variables": "{\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{userPassword}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Retrieve current user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query currentUser {\n  currentUser {\n    __typename\n    ... on User {\n      id\n      createdAt\n      updatedAt\n      isActive\n      name\n      email\n    }\n\n    ... on NotAuthenticatedError {\n      message\n    }\n\n    ... on Error {\n      message\n    }\n  }\n}\n",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/graphql",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

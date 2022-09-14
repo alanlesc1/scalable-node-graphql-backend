@@ -1,0 +1,48 @@
+# User type
+type User implements Timestamps { 
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+  isActive: Boolean!
+  name: String!
+  email: String!
+  isUserVerified: Boolean!
+  verificationCodeExp: Date
+}
+
+# Sign up types
+type SignUpResultSuccess {
+  user: User
+}
+
+type SignUpResultError implements Error {
+  message: String!
+}
+
+union SignUpResult = SignUpResultSuccess | SignUpResultError
+
+# User verification types
+type UserVerificationResultSuccess {
+  user: User
+}
+
+type UserVerificationResultError implements Error {
+  message: String!
+}
+
+union UserVerificationResult = UserVerificationResultSuccess | UserVerificationResultError
+
+# Login types
+type LoginResultSuccess {
+  token: String
+  user: User
+}
+
+type LoginResultError implements Error {
+  message: String!
+}
+
+union LoginResult = LoginResultSuccess | LoginResultError
+
+# CurrentUser types
+union CurrentUserResult = User | NotAuthenticatedError
